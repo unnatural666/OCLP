@@ -1,6 +1,6 @@
 package com.oclp.domain.order.request;
 
-import com.xuecheng.framework.model.request.RequestData;
+import com.oclp.model.request.RequestData;
 import lombok.Data;
 
 /**
