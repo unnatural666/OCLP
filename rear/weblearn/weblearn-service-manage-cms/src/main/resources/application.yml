@@ -4,6 +4,6 @@ spring:
   application:
     name: weblearn-service-manage-cms
   data:
-  mongodb:
-    uri: mongodb://localhost:27017
-    database: weblearn_cms
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: weblearn_cms
