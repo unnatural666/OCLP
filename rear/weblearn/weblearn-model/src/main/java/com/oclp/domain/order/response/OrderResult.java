@@ -1,8 +1,8 @@
 package com.oclp.domain.order.response;
 
 import com.oclp.domain.order.XcOrders;
-import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.framework.model.response.ResultCode;
+import com.oclp.model.response.ResponseResult;
+import com.oclp.model.response.ResultCode;
 import lombok.Data;
 import lombok.ToString;
 

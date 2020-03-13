@@ -1,6 +1,6 @@
 package com.oclp.domain.media;
 
-import com.xuecheng.framework.utils.MD5Util;
+import com.oclp.utils.MD5Util;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;

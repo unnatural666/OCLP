@@ -1,6 +1,6 @@
 package com.oclp.domain.cms.response;
 
-import com.xuecheng.framework.model.response.ResultCode;
+import com.oclp.model.response.ResultCode;
 import lombok.ToString;
 
 /**

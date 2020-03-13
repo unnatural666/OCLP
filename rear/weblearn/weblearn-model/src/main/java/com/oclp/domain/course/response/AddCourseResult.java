@@ -1,7 +1,7 @@
 package com.oclp.domain.course.response;
 
-import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.framework.model.response.ResultCode;
+import com.oclp.model.response.ResponseResult;
+import com.oclp.model.response.ResultCode;
 import lombok.Data;
 import lombok.ToString;
 
@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class AddCourseResult extends ResponseResult {
-    public AddCourseResult(ResultCode resultCode,String courseid) {
+    public AddCourseResult(ResultCode resultCode, String courseid) {
         super(resultCode);
         this.courseid = courseid;
     }
