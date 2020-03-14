@@ -18,8 +18,8 @@ export const page_add = params => {
   return http.requestPost(apiUrl+'/cms/page/add',params)
 }
 /*页面修改*/
-export const page_edit = params => {
-  return http.requestPut(apiUrl+'/cms/page/edit',params)
+export const page_edit = (id,params) => {
+  return http.requestPut(apiUrl+'/cms/page/edit/'+id,params)
 }
 /*页面查询*/
 export const page_get = id => {

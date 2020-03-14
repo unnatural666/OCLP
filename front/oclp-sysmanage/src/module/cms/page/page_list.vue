@@ -85,7 +85,7 @@
       return {
         params:{
           page:1,//页码
-          size:2,//每页显示个数
+          size:10,//每页显示个数
           siteId:''//站点id
         },
         listLoading:false,

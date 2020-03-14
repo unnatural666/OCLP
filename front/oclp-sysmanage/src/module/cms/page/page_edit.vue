@@ -112,7 +112,7 @@
           if (valid) {
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
               this.addLoading = true;
-              cmsApi.page_edit(this.pageForm).then((res) => {
+              cmsApi.page_edit(this.pageId,this.pageForm).then((res) => {
                   console.log(res);
                 if(res.success){
                   this.addLoading = false;
@@ -138,8 +138,10 @@
       //根据主键查询页面信息
       cmsApi.page_get(this.pageId).then((res) => {
         console.log(res);
-        if(res.success){
-          this.pageForm = res.cmsPage;
+        if(res){
+          console.log('hello');
+          this.pageForm = res;
+
         }
       });
     },
