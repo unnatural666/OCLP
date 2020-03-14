@@ -2,6 +2,7 @@ package com.oclp.manage_cms.service;
 
 import com.oclp.domain.cms.CmsPage;
 import com.oclp.domain.cms.request.QueryPageRequest;
+import com.oclp.domain.cms.response.CmsPageResult;
 import com.oclp.manage_cms.dao.CmsPageRepository;
 import com.oclp.model.response.CommonCode;
 import com.oclp.model.response.QueryResponseResult;
@@ -39,8 +40,10 @@ public class PageService {
         if(StringUtils.isNotEmpty(queryPageRequest.getPageAliase())){
             cmsPage.setPageAliase(queryPageRequest.getPageAliase());
         }
+        System.out.println(cmsPage);
         //创建条件实例
         Example<CmsPage> example = Example.of(cmsPage, exampleMatcher);
+        System.out.println(example);
 
         //分页参数
         if(page<=0){
@@ -53,7 +56,9 @@ public class PageService {
         //分页对象
         Pageable pageable =PageRequest.of(page, size);
         //分页查询
-        Page<CmsPage> all = cmsPageRepository.findAll(example, pageable);
+        Page<CmsPage> all = cmsPageRepository.findAll(example,pageable);
+        System.out.println(all);
+
         QueryResult queryResult=new QueryResult();
         queryResult.setList(all.getContent());//数据列表
         queryResult.setTotal(all.getTotalElements());//数据总记录数
@@ -61,4 +66,22 @@ public class PageService {
         QueryResponseResult queryResponseResult=new QueryResponseResult(CommonCode.SUCCESS,queryResult);
         return queryResponseResult;
     }
+
+    //新增页面
+    public CmsPageResult add(CmsPage cmsPage){
+        //校验页面名称、站点Id、页面webpath唯一
+        CmsPage cmsPage1=cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(cmsPage.getPageName(),cmsPage.getSiteId(),cmsPage.getPageWebPath());
+        if (cmsPage1==null){
+            //调用dao新增页面
+            cmsPage.setPageId(null);
+            cmsPageRepository.save(cmsPage);
+            return new CmsPageResult(CommonCode.SUCCESS,cmsPage);
+
+        }
+        //添加失败
+        return new CmsPageResult(CommonCode.FAIL,null);
+
+
+    }
+
 }

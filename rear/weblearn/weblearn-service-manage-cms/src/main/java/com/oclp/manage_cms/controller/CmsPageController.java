@@ -3,16 +3,14 @@ package com.oclp.manage_cms.controller;
 import com.oclp.api.cms.CmsPageControllerApi;
 import com.oclp.domain.cms.CmsPage;
 import com.oclp.domain.cms.request.QueryPageRequest;
+import com.oclp.domain.cms.response.CmsPageResult;
 import com.oclp.manage_cms.service.PageService;
 import com.oclp.model.response.CommonCode;
 import com.oclp.model.response.QueryResponseResult;
 import com.oclp.model.response.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,5 +36,11 @@ public class CmsPageController implements CmsPageControllerApi {
         QueryResponseResult queryResponseResult=new QueryResponseResult(CommonCode.SUCCESS,queryResult);
         return queryResponseResult;*/
        return pageService.findList(page,size,queryPageRequest);
+    }
+
+    @Override
+    @PostMapping("add")
+    public CmsPageResult add(@RequestBody CmsPage cmsPage) {
+        return pageService.add(cmsPage);
     }
 }
