@@ -44,6 +44,10 @@ public class PageService {
         if(StringUtils.isNotEmpty(queryPageRequest.getPageAliase())){
             cmsPage.setPageAliase(queryPageRequest.getPageAliase());
         }
+        //设置条件值(页面名称)
+        if(StringUtils.isNotEmpty(queryPageRequest.getPageName())){
+            cmsPage.setPageName(queryPageRequest.getPageName());
+        }
         System.out.println(cmsPage);
         //创建条件实例
         Example<CmsPage> example = Example.of(cmsPage, exampleMatcher);
@@ -80,12 +84,9 @@ public class PageService {
             cmsPage.setPageId(null);
             cmsPageRepository.save(cmsPage);
             return new CmsPageResult(CommonCode.SUCCESS,cmsPage);
-
         }
         //添加失败
         return new CmsPageResult(CommonCode.FAIL,null);
-
-
     }
     //根据页面id查询页面信息
     public CmsPage getById(String id){
@@ -113,6 +114,8 @@ public class PageService {
             cmsPage1.setPageWebPath(cmsPage.getPageWebPath());
             //更新物理路径
             cmsPage1.setPagePhysicalPath(cmsPage.getPagePhysicalPath());
+            //更新数据Url
+            cmsPage1.setDataUrl(cmsPage.getDataUrl());
             //执行更新
             cmsPageRepository.save(cmsPage1);
             return new CmsPageResult(CommonCode.SUCCESS,cmsPage1);
