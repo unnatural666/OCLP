@@ -3,9 +3,7 @@ package com.oclp.domain.cms.response;
 import com.oclp.model.response.ResultCode;
 import lombok.ToString;
 
-/**
- * Created by mrt on 2018/3/5.
- */
+
 @ToString
 public enum CmsCode implements ResultCode {
     CMS_ADDPAGE_EXISTSNAME(false,24001,"页面名称已存在！"),

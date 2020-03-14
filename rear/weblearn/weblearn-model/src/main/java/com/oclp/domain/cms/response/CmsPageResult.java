@@ -5,9 +5,7 @@ import com.oclp.model.response.ResponseResult;
 import com.oclp.model.response.ResultCode;
 import lombok.Data;
 
-/**
- *
- */
+
 @Data
 public class CmsPageResult extends ResponseResult {
     CmsPage cmsPage;

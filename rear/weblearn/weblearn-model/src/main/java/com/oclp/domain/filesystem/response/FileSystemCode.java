@@ -5,9 +5,6 @@ import com.oclp.model.response.ResultCode;
 import lombok.ToString;
 
 
-/**
- * Created by admin on 2018/3/5.
- */
 @ToString
 public enum FileSystemCode implements ResultCode {
     FS_UPLOADFILE_FILEISNULL(false,25001,"上传文件为空！"),

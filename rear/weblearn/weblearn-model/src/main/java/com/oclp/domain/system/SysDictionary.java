@@ -8,9 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
-/**
- * Created by admin on 2018/2/6.
- */
+
 @Data
 @ToString
 @Document(collection = "sys_dictionary")

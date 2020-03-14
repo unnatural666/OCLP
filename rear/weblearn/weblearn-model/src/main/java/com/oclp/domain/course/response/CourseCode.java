@@ -6,9 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
 
 
-/**
- * Created by admin on 2018/3/5.
- */
+
 @ToString
 public enum CourseCode implements ResultCode {
     COURSE_DENIED_DELETE(false,31001,"删除课程失败，只允许删除本机构的课程！"),
