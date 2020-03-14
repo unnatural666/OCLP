@@ -7,10 +7,14 @@ import com.oclp.manage_cms.dao.CmsPageRepository;
 import com.oclp.model.response.CommonCode;
 import com.oclp.model.response.QueryResponseResult;
 import com.oclp.model.response.QueryResult;
+import com.oclp.model.response.ResponseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 @Service
 public class PageService {
     @Autowired
@@ -83,5 +87,46 @@ public class PageService {
 
 
     }
-
+    //根据页面id查询页面信息
+    public CmsPage getById(String id){
+        Optional<CmsPage> optional=cmsPageRepository.findById(id);
+        if(optional.isPresent()){
+            CmsPage cmsPage=optional.get();
+            return cmsPage;
+        }
+        return null;
+    }
+    //修改页面
+    public CmsPageResult update(String id,CmsPage cmsPage){
+        //根据id从数据库查询页面信息
+        CmsPage cmsPage1=this.getById(id);
+        if(cmsPage!=null){
+            //更新模板id
+            cmsPage1.setTemplateId(cmsPage.getTemplateId());
+            //更新所属站点
+            cmsPage1.setSiteId(cmsPage.getSiteId());
+            //更新页面别名
+            cmsPage1.setPageAliase(cmsPage.getPageAliase());
+            //更新页面名称
+            cmsPage1.setPageName(cmsPage.getPageName());
+            //更新访问路径
+            cmsPage1.setPageWebPath(cmsPage.getPageWebPath());
+            //更新物理路径
+            cmsPage1.setPagePhysicalPath(cmsPage.getPagePhysicalPath());
+            //执行更新
+            cmsPageRepository.save(cmsPage1);
+            return new CmsPageResult(CommonCode.SUCCESS,cmsPage1);
+        }
+        return new CmsPageResult(CommonCode.FAIL,null);
+    }
+    //删除页面(根据id)
+    public ResponseResult delete(String id){
+        //查询是否有该页面
+        Optional<CmsPage> optional=cmsPageRepository.findById(id);
+        if (optional.isPresent()){
+            cmsPageRepository.deleteById(id);
+            return new ResponseResult(CommonCode.SUCCESS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
+    }
 }
