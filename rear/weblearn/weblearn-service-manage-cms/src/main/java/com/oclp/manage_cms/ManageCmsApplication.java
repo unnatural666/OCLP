@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EntityScan("com.oclp.domain.cms")//扫描实体类
 @ComponentScan(basePackages={"com.oclp.api"})//扫描接口
-@ComponentScan(basePackages="com.oclp")//扫描common工程下的类
+//@ComponentScan(basePackages="com.oclp")//扫描common工程下的类
 @ComponentScan(basePackages={"com.oclp.manage_cms"})//扫描本项目下的所有类
 public class ManageCmsApplication {
     public static void main(String[] args) {
