@@ -1,8 +1,6 @@
 package com.oclp.service;
 
-import com.oclp.dao.CourseBaseRepository;
 import com.oclp.dao.TeachplanMapper;
-import com.oclp.dao.TeachplanRepository;
 import com.oclp.domain.course.ext.TeachplanNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +10,11 @@ public class CourseService {
     @Autowired
     TeachplanMapper teachplanMapper;
 
-    @Autowired
+  /*  @Autowired
     TeachplanRepository teachplanRepository;
 
     @Autowired
-    CourseBaseRepository courseBaseRepository;
+    CourseBaseRepository courseBaseRepository;*/
     //查询课程计划
     public TeachplanNode findTeachplanList(String courseId){
         return teachplanMapper.selectList(courseId);
