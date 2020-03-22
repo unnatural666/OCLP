@@ -1,14 +1,21 @@
 package com.oclp.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.oclp.common.exception.ExceptionCast;
 import com.oclp.common.model.response.CommonCode;
+import com.oclp.common.model.response.QueryResponseResult;
+import com.oclp.common.model.response.QueryResult;
 import com.oclp.common.model.response.ResponseResult;
 import com.oclp.dao.CourseBaseRepository;
+import com.oclp.dao.CourseMapper;
 import com.oclp.dao.TeachplanMapper;
 import com.oclp.dao.TeachplanRepository;
 import com.oclp.domain.course.CourseBase;
 import com.oclp.domain.course.Teachplan;
+import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
+import com.oclp.domain.course.request.CourseListRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +36,9 @@ public class CourseService {
 
     @Autowired
     CourseBaseRepository courseBaseRepository;
+
+    @Autowired
+    CourseMapper courseMapper;
     //查询课程计划
     public TeachplanNode findTeachplanList(String courseId){
         return teachplanMapper.selectList(courseId);
@@ -96,5 +106,31 @@ public class CourseService {
         //返回根结点的id
         return teachplanList.get(0).getId();
 
+    }
+
+    //课程列表分页查询
+    public QueryResponseResult<CourseInfo> findCourseList(int page, int size, CourseListRequest courseListRequest){
+        if (courseListRequest==null){
+            courseListRequest=new CourseListRequest();
+        }
+        if (page<=0){
+            page=0;
+        }
+        if (size<=0){
+            size=20;
+        }
+        //设置分页参数
+        PageHelper.startPage(page,size);
+        //分页查询
+        Page<CourseInfo> courseListPage=courseMapper.findCourseListPage(courseListRequest);
+        //查询列表
+        List<CourseInfo> list=courseListPage.getResult();
+        //总记录数
+        long total=courseListPage.getTotal();
+        //查询结果集
+        QueryResult<CourseInfo> courseInfoQueryResult=new QueryResult<CourseInfo>();
+        courseInfoQueryResult.setList(list);
+        courseInfoQueryResult.setTotal(total);
+        return new QueryResponseResult<CourseInfo>(CommonCode.SUCCESS,courseInfoQueryResult);
     }
 }

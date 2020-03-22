@@ -1,8 +1,11 @@
 package com.oclp.api.course;
 
+import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.ResponseResult;
 import com.oclp.domain.course.Teachplan;
+import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
+import com.oclp.domain.course.request.CourseListRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -13,4 +16,7 @@ public interface CourseControllerApi {
 
     @ApiOperation("添加课程计划")
     public ResponseResult addTeachplan(Teachplan teachplan);
+
+    @ApiOperation("查询我的课程列表")
+    public QueryResponseResult<CourseInfo> findCourseList(int page, int size, CourseListRequest courseListRequest);
 }
