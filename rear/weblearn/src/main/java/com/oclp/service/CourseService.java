@@ -7,11 +7,9 @@ import com.oclp.common.model.response.CommonCode;
 import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.QueryResult;
 import com.oclp.common.model.response.ResponseResult;
-import com.oclp.dao.CourseBaseRepository;
-import com.oclp.dao.CourseMapper;
-import com.oclp.dao.TeachplanMapper;
-import com.oclp.dao.TeachplanRepository;
+import com.oclp.dao.*;
 import com.oclp.domain.course.CourseBase;
+import com.oclp.domain.course.CourseMarket;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -37,6 +35,9 @@ public class CourseService {
 
     @Autowired
     CourseBaseRepository courseBaseRepository;
+
+    @Autowired
+    CourseMarketRepository courseMarketRepository;
 
     @Autowired
     CourseMapper courseMapper;
@@ -142,5 +143,61 @@ public class CourseService {
         courseBase.setStatus("202001");
         courseBaseRepository.save(courseBase);
         return new AddCourseResult(CommonCode.SUCCESS,courseBase.getId());
+    }
+
+    //获取课程信息
+    public CourseBase getCoursebaseById(String courseid){
+        Optional<CourseBase> optional=courseBaseRepository.findById(courseid);
+        if (optional.isPresent()){
+            return optional.get();
+        }
+        return null;
+    }
+
+    //修改课程信息
+    @Transactional
+    public ResponseResult updateCoursebase(String id,CourseBase courseBase){
+        CourseBase one=this.getCoursebaseById(id);
+        one.setName(courseBase.getName());
+        one.setMt(courseBase.getMt());
+        one.setSt(courseBase.getSt());
+        one.setGrade(courseBase.getGrade());
+        one.setStudymodel(courseBase.getStudymodel());
+        one.setUsers(courseBase.getUsers());
+        one.setDescription(courseBase.getDescription());
+        CourseBase save=courseBaseRepository.save(one);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    //获取课程营销信息
+    public CourseMarket getCourseMarketById(String courseid){
+        Optional<CourseMarket> optional = courseMarketRepository.findById(courseid);
+        if(!optional.isPresent()){
+            return optional.get();
+        }
+        return null;
+    }
+
+    //更新课程营销信息
+    @Transactional
+    public CourseMarket updateCourseMarket(String id,CourseMarket courseMarket){
+        CourseMarket one = this.getCourseMarketById(id);
+        if (one!=null){
+            one.setCharge(courseMarket.getCharge());
+            one.setStartTime(courseMarket.getStartTime());//课程有效期，开始时间
+            one.setEndTime(courseMarket.getEndTime());//课程有效期，结束时间
+            one.setPrice(courseMarket.getPrice());
+            one.setQq(courseMarket.getQq());
+            one.setValid(courseMarket.getValid());
+            courseMarketRepository.save(one);
+        }else {
+            //添加课程营销信息
+            one = new CourseMarket();
+            BeanUtils.copyProperties(courseMarket, one);
+            //设置课程id
+            one.setId(id);
+            courseMarketRepository.save(one);
+        }
+        return one;
     }
 }
