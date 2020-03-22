@@ -1,6 +1,8 @@
 server:
   port: 31200
 spring:
+  #mongodb配置
+  #mysql配置
   datasource:
     username: root
     password: 971205
@@ -24,5 +26,10 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: weblearn
+
 pagehelper:
   helper-dialect: mysql
