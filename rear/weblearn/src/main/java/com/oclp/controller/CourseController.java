@@ -59,9 +59,9 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    @GetMapping("/coursemarket/get/{courseId}")
-    public CourseMarket getCourseMarketById(@PathVariable("courseId") String courseId) {
-        return courseService.getCourseMarketById(courseId);
+    @GetMapping("/coursemarket/get/{Id}")
+    public CourseMarket getCourseMarketById(@PathVariable("Id") String Id) {
+        return courseService.getCourseMarketById(Id);
     }
 
     @Override

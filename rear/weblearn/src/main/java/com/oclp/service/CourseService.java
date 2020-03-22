@@ -170,9 +170,9 @@ public class CourseService {
     }
 
     //获取课程营销信息
-    public CourseMarket getCourseMarketById(String courseid){
-        Optional<CourseMarket> optional = courseMarketRepository.findById(courseid);
-        if(!optional.isPresent()){
+    public CourseMarket getCourseMarketById(String id){
+        Optional<CourseMarket> optional = courseMarketRepository.findById(id);
+        if(optional.isPresent()){
             return optional.get();
         }
         return null;
