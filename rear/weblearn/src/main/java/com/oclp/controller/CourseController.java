@@ -1,9 +1,11 @@
 package com.oclp.controller;
 
 import com.oclp.api.course.CourseControllerApi;
+import com.oclp.common.model.response.CommonCode;
 import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.ResponseResult;
 import com.oclp.domain.course.CourseBase;
+import com.oclp.domain.course.CourseMarket;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -42,5 +44,34 @@ public class CourseController implements CourseControllerApi {
     @PostMapping("/coursebase/add")
     public AddCourseResult addCourseBase(@RequestBody CourseBase courseBase) {
         return courseService.addCourseBase(courseBase);
+    }
+
+    @Override
+    @GetMapping("/coursebase/get/{courseId}")
+    public CourseBase getCourseBaseById(@PathVariable("courseId") String courseId) throws RuntimeException {
+        return courseService.getCoursebaseById(courseId);
+    }
+
+    @Override
+    @PutMapping("/coursebase/update/{id}")
+    public ResponseResult updateCourseBase(@PathVariable("id") String id,@RequestBody CourseBase courseBase) {
+        return courseService.updateCoursebase(id,courseBase);
+    }
+
+    @Override
+    @GetMapping("/coursemarket/get/{courseId}")
+    public CourseMarket getCourseMarketById(@PathVariable("courseId") String courseId) {
+        return courseService.getCourseMarketById(courseId);
+    }
+
+    @Override
+    @PostMapping("/coursemarket/update/{id}")
+    public ResponseResult updateCourseMarket(@PathVariable("id") String id,@RequestBody CourseMarket courseMarket) {
+        CourseMarket courseMarket1=courseService.updateCourseMarket(id,courseMarket);
+        if (courseMarket1!=null){
+            return new ResponseResult(CommonCode.SUCCESS);
+        }else {
+            return new ResponseResult(CommonCode.FAIL);
+        }
     }
 }

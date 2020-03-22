@@ -3,6 +3,7 @@ package com.oclp.api.course;
 import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.ResponseResult;
 import com.oclp.domain.course.CourseBase;
+import com.oclp.domain.course.CourseMarket;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -24,4 +25,16 @@ public interface CourseControllerApi {
 
     @ApiOperation("添加课程基础信息")
     public AddCourseResult addCourseBase(CourseBase courseBase);
+
+    @ApiOperation("获取课程基础信息")
+    public CourseBase getCourseBaseById(String courseId) throws RuntimeException;
+
+    @ApiOperation("更新课程基础信息")
+    public ResponseResult updateCourseBase(String id,CourseBase courseBase);
+
+    @ApiOperation("获取课程营销信息")
+    public CourseMarket getCourseMarketById(String courseId);
+
+    @ApiOperation("更新课程营销信息")
+    public ResponseResult updateCourseMarket(String id,CourseMarket courseMarket);
 }
