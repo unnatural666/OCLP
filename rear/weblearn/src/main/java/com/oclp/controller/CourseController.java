@@ -24,6 +24,6 @@ public class CourseController implements CourseControllerApi {
     @Override
     @PostMapping("/teachplan/add")
     public ResponseResult addTeachplan(@RequestBody Teachplan teachplan) {
-        return null;
+        return courseService.addTeachplan(teachplan);
     }
 }
