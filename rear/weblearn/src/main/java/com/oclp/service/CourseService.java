@@ -16,6 +16,7 @@ import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
 import com.oclp.domain.course.request.CourseListRequest;
+import com.oclp.domain.course.response.AddCourseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +133,14 @@ public class CourseService {
         courseInfoQueryResult.setList(list);
         courseInfoQueryResult.setTotal(total);
         return new QueryResponseResult<CourseInfo>(CommonCode.SUCCESS,courseInfoQueryResult);
+    }
+
+    //添加课程提交
+    @Transactional
+    public AddCourseResult addCourseBase(CourseBase courseBase){
+        //课程状态默认为未发布状态
+        courseBase.setStatus("202001");
+        courseBaseRepository.save(courseBase);
+        return new AddCourseResult(CommonCode.SUCCESS,courseBase.getId());
     }
 }
