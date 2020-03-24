@@ -10,6 +10,7 @@ import com.oclp.common.model.response.ResponseResult;
 import com.oclp.dao.*;
 import com.oclp.domain.course.CourseBase;
 import com.oclp.domain.course.CourseMarket;
+import com.oclp.domain.course.CoursePic;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -41,6 +42,9 @@ public class CourseService {
 
     @Autowired
     CourseMapper courseMapper;
+
+    @Autowired
+    CoursePicRepository coursePicRepository;
     //查询课程计划
     public TeachplanNode findTeachplanList(String courseId){
         return teachplanMapper.selectList(courseId);
@@ -199,5 +203,44 @@ public class CourseService {
             courseMarketRepository.save(one);
         }
         return one;
+    }
+
+    //添加课程图片
+    @Transactional
+    public ResponseResult addCoursePic(String courseId, String pic) {
+        CoursePic coursePic=null;
+        //查询课程图片
+        Optional<CoursePic> picOptional = coursePicRepository.findById(courseId);
+        if(picOptional.isPresent()){
+            coursePic = picOptional.get();
+        }
+        //没有课程图片则新建对象
+        if(coursePic == null){
+            coursePic = new CoursePic();
+        }
+        coursePic.setPic(pic);
+        coursePic.setCourseid(courseId);
+        coursePicRepository.save(coursePic);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    //查询课程图片
+    public CoursePic findCoursePic(String courseId) {
+        Optional<CoursePic> picOptional = coursePicRepository.findById(courseId);
+        if(picOptional.isPresent()){
+            CoursePic coursePic = picOptional.get();
+            return coursePic;
+        }
+        return null;
+    }
+
+    //删除课程图片
+    @Transactional
+    public ResponseResult deleteCoursePic(String courseId) {
+        long result=coursePicRepository.deleteByCourseid(courseId);
+        if (result>0){
+            return new ResponseResult(CommonCode.SUCCESS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
     }
 }

@@ -30,6 +30,25 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: weblearn
+  #SpringMVC上传文件配置
+  servlet:
+    multipart:
+      #默认支持文件上传
+      enabled: true
+      #支持文件写入磁盘
+      file-size-threshold: 0
+      #上传文件临时目录
+      location:
+      #最大支持文件大小
+      max-file-size: 1MB
+      #最大支持请求大小
+      max-request-size: 30MB
+weblearn:
+  fastdfs:
+    connect_timeout_in_seconds: 5
+    network_timeout_in_seconds: 30
+    charset: utf-8
+    tracker_servers: 192.168.101.26:22122
 
 pagehelper:
   helper-dialect: mysql
