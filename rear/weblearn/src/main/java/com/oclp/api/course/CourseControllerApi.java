@@ -4,6 +4,7 @@ import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.ResponseResult;
 import com.oclp.domain.course.CourseBase;
 import com.oclp.domain.course.CourseMarket;
+import com.oclp.domain.course.CoursePic;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -37,4 +38,14 @@ public interface CourseControllerApi {
 
     @ApiOperation("更新课程营销信息")
     public ResponseResult updateCourseMarket(String id,CourseMarket courseMarket);
+
+    @ApiOperation("添加课程图片")
+    public ResponseResult addCoursePic(String courseId,String pic);
+
+    @ApiOperation("查询课程图片")
+    public CoursePic findCoursePic(String courseId);
+
+    @ApiOperation("删除课程图片")
+    public ResponseResult deleteCoursePic(String courseId);
+
 }

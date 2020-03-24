@@ -6,6 +6,7 @@ import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.ResponseResult;
 import com.oclp.domain.course.CourseBase;
 import com.oclp.domain.course.CourseMarket;
+import com.oclp.domain.course.CoursePic;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -73,5 +74,23 @@ public class CourseController implements CourseControllerApi {
         }else {
             return new ResponseResult(CommonCode.FAIL);
         }
+    }
+
+    @Override
+    @PostMapping("/coursepic/add")
+    public ResponseResult addCoursePic(@RequestParam("courseId") String courseId,@RequestParam("pic") String pic) {
+        return courseService.addCoursePic(courseId,pic);
+    }
+
+    @Override
+    @GetMapping("/coursepic/list/{courseId}")
+    public CoursePic findCoursePic(@PathVariable("courseId") String courseId) {
+        return courseService.findCoursePic(courseId);
+    }
+
+    @Override
+    @DeleteMapping("/coursepic/delete")
+    public ResponseResult deleteCoursePic(@RequestParam("courseId") String courseId) {
+        return courseService.deleteCoursePic(courseId);
     }
 }
