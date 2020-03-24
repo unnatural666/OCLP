@@ -9,9 +9,11 @@ import com.oclp.domain.course.CourseMarket;
 import com.oclp.domain.course.CoursePic;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
+import com.oclp.domain.course.ext.CourseView;
 import com.oclp.domain.course.ext.TeachplanNode;
 import com.oclp.domain.course.request.CourseListRequest;
 import com.oclp.domain.course.response.AddCourseResult;
+import com.oclp.domain.course.response.CoursePublishResult;
 import com.oclp.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -92,5 +94,17 @@ public class CourseController implements CourseControllerApi {
     @DeleteMapping("/coursepic/delete")
     public ResponseResult deleteCoursePic(@RequestParam("courseId") String courseId) {
         return courseService.deleteCoursePic(courseId);
+    }
+
+    @Override
+    @GetMapping("/courseview/{id}")
+    public CourseView courseview(@PathVariable("id") String id) {
+        return courseService.getCourseView(id);
+    }
+
+    @Override
+    @PostMapping("/publish/{id}")
+    public CoursePublishResult publish(@PathVariable("id") String id) {
+        return courseService.publish(id);
     }
 }
