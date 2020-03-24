@@ -13,9 +13,12 @@ import com.oclp.domain.course.CourseMarket;
 import com.oclp.domain.course.CoursePic;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
+import com.oclp.domain.course.ext.CourseView;
 import com.oclp.domain.course.ext.TeachplanNode;
 import com.oclp.domain.course.request.CourseListRequest;
 import com.oclp.domain.course.response.AddCourseResult;
+import com.oclp.domain.course.response.CourseCode;
+import com.oclp.domain.course.response.CoursePublishResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +160,16 @@ public class CourseService {
         }
         return null;
     }
+    //根据id查询课程基本信息
+    public CourseBase findCourseBaseById(String courseId){
+        Optional<CourseBase> baseOptional = courseBaseRepository.findById(courseId);
+        if(baseOptional.isPresent()){
+            CourseBase courseBase = baseOptional.get();
+            return courseBase;
+        }
+        ExceptionCast.cast(CourseCode.COURSE_DENIED_DELETE);
+        return null;
+    }
 
     //修改课程信息
     @Transactional
@@ -242,5 +255,54 @@ public class CourseService {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
+    }
+
+    //查询课程详情
+    public CourseView getCourseView(String id) {
+        CourseView courseView=new CourseView();
+        //查询课程基本信息
+        Optional<CourseBase> courseBaseoptional = courseBaseRepository.findById(id);
+        if(courseBaseoptional.isPresent()){
+            CourseBase courseBase = courseBaseoptional.get();
+            courseView.setCourseBase(courseBase);
+        }
+        //查询课程图片信息
+        Optional<CoursePic> picOptional = coursePicRepository.findById(id);
+        if(picOptional.isPresent()){
+            CoursePic coursePic = picOptional.get();
+            courseView.setCoursePic(coursePic);
+        }
+        //查询课程营销信息
+        Optional<CourseMarket> courseMarketOptional = courseMarketRepository.findById(id);
+        if(courseMarketOptional.isPresent()){
+            CourseMarket courseMarket = courseMarketOptional.get();
+            courseView.setCourseMarket(courseMarket);
+        }
+        //查询课程计划信息
+        TeachplanNode teachplanNode = teachplanMapper.selectList(id);
+        courseView.setTeachplanNode(teachplanNode);
+
+        return courseView;
+    }
+
+    //课程发布
+    @Transactional
+    public CoursePublishResult publish(String id) {
+
+        //保存课程状态为已发布
+        CourseBase courseBase = saveCoursePubState(id);
+        //课程索引...
+        //课程缓存...
+
+        return new CoursePublishResult(CommonCode.SUCCESS);
+    }
+
+    //更新课程发布状态
+    private CourseBase saveCoursePubState(String courseId){
+        CourseBase courseBase = this.findCourseBaseById(courseId);
+        //更新发布状态
+        courseBase.setStatus("202002");
+        CourseBase save = courseBaseRepository.save(courseBase);
+        return save;
     }
 }

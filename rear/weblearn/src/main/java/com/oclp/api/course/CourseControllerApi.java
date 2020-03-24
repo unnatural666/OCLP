@@ -7,9 +7,11 @@ import com.oclp.domain.course.CourseMarket;
 import com.oclp.domain.course.CoursePic;
 import com.oclp.domain.course.Teachplan;
 import com.oclp.domain.course.ext.CourseInfo;
+import com.oclp.domain.course.ext.CourseView;
 import com.oclp.domain.course.ext.TeachplanNode;
 import com.oclp.domain.course.request.CourseListRequest;
 import com.oclp.domain.course.response.AddCourseResult;
+import com.oclp.domain.course.response.CoursePublishResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -47,5 +49,12 @@ public interface CourseControllerApi {
 
     @ApiOperation("删除课程图片")
     public ResponseResult deleteCoursePic(String courseId);
+
+    @ApiOperation("课程视图查询")
+    public CourseView courseview(String id);
+
+    @ApiOperation("课程发布")
+    public CoursePublishResult publish(String id);
+
 
 }
