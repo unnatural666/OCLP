@@ -5,7 +5,7 @@ spring:
   #mysql配置
   datasource:
     username: root
-    password: 0914
+    password: 971205
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://localhost:3306/weblearn_course?characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
