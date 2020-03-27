@@ -48,7 +48,13 @@ weblearn:
     connect_timeout_in_seconds: 5
     network_timeout_in_seconds: 30
     charset: utf-8
-    tracker_servers: 192.168.1.105:22122
+    tracker_servers: 192.168.101.26:22122
+  elasticsearch:
+    hostlist: ${eshostlist:127.0.0.1:9200} #多个结点中间用逗号分隔
+    course:
+      index: weblearn_course
+      type: doc
+      source_field: id,name,grade,mt,st,charge,valid,pic,qq,price,price_old,status,studymodel,teachmode,expires,pub_time,start_time,end_time
 
 pagehelper:
   helper-dialect: mysql
