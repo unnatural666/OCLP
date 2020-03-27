@@ -1,5 +1,6 @@
 package com.oclp.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.oclp.common.exception.ExceptionCast;
@@ -8,10 +9,7 @@ import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.QueryResult;
 import com.oclp.common.model.response.ResponseResult;
 import com.oclp.dao.*;
-import com.oclp.domain.course.CourseBase;
-import com.oclp.domain.course.CourseMarket;
-import com.oclp.domain.course.CoursePic;
-import com.oclp.domain.course.Teachplan;
+import com.oclp.domain.course.*;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.CourseView;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -25,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,21 +33,18 @@ import java.util.Optional;
 public class CourseService {
     @Autowired
     TeachplanMapper teachplanMapper;
-
     @Autowired
     TeachplanRepository teachplanRepository;
-
     @Autowired
     CourseBaseRepository courseBaseRepository;
-
     @Autowired
     CourseMarketRepository courseMarketRepository;
-
     @Autowired
     CourseMapper courseMapper;
-
     @Autowired
     CoursePicRepository coursePicRepository;
+    @Autowired
+    CoursePubRepository coursePubRepository;
     //查询课程计划
     public TeachplanNode findTeachplanList(String courseId){
         return teachplanMapper.selectList(courseId);
@@ -291,7 +288,12 @@ public class CourseService {
 
         //保存课程状态为已发布
         CourseBase courseBase = saveCoursePubState(id);
-        //课程索引...
+        if (courseBase==null){
+            return new CoursePublishResult(CommonCode.FAIL);
+        }
+        //保存课程索引
+        CoursePub coursePub=createCoursePub(id);
+        saveCoursePub(id,coursePub);
         //课程缓存...
 
         return new CoursePublishResult(CommonCode.SUCCESS);
@@ -304,5 +306,56 @@ public class CourseService {
         courseBase.setStatus("202002");
         CourseBase save = courseBaseRepository.save(courseBase);
         return save;
+    }
+    //创建coursePub对象
+    private CoursePub createCoursePub(String id){
+        CoursePub coursePub=new CoursePub();
+        //基础信息
+        Optional<CourseBase> courseBaseOptional = courseBaseRepository.findById(id);
+        if(courseBaseOptional.isPresent()){
+            CourseBase courseBase = courseBaseOptional.get();
+            BeanUtils.copyProperties(courseBase, coursePub);
+        }
+        //查询课程图片
+        Optional<CoursePic> picOptional = coursePicRepository.findById(id);
+        if(picOptional.isPresent()){
+            CoursePic coursePic = picOptional.get();
+            BeanUtils.copyProperties(coursePic, coursePub);
+        }
+        //课程营销信息
+        Optional<CourseMarket> marketOptional = courseMarketRepository.findById(id);
+        if(marketOptional.isPresent()){
+            CourseMarket courseMarket = marketOptional.get();
+            BeanUtils.copyProperties(courseMarket, coursePub);
+        }
+        //课程计划
+        TeachplanNode teachplanNode = teachplanMapper.selectList(id);
+        //将课程计划转成json
+        String teachplanString = JSON.toJSONString(teachplanNode);
+        coursePub.setTeachplan(teachplanString);
+        return coursePub;
+    }
+    //将coursePub对象保存到数据库
+    private CoursePub saveCoursePub(String id,CoursePub coursePub){
+        CoursePub coursePubNew = null;
+        Optional<CoursePub> coursePubOptional = coursePubRepository.findById(id);
+        if(coursePubOptional.isPresent()){
+            coursePubNew = coursePubOptional.get();
+        }
+        if(coursePubNew == null){
+            coursePubNew = new CoursePub();
+        }
+        BeanUtils.copyProperties(coursePub,coursePubNew);
+        //设置主键
+        coursePubNew.setId(id);
+        //更新时间戳为最新时间,给logstach使用
+        coursePubNew.setTimestamp(new Date());
+        //发布时间
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY‐MM‐dd HH:mm:ss");
+        String date = simpleDateFormat.format(new Date());
+        coursePubNew.setPubTime(date);
+        coursePubRepository.save(coursePubNew);
+        return coursePubNew;
+
     }
 }
