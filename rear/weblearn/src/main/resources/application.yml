@@ -48,7 +48,7 @@ weblearn:
     connect_timeout_in_seconds: 5
     network_timeout_in_seconds: 30
     charset: utf-8
-    tracker_servers: 192.168.1.105:22122
+    tracker_servers: 192.168.137.84:22122
 
 pagehelper:
   helper-dialect: mysql
