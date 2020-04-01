@@ -65,15 +65,15 @@ public class EsCourseService {
             multiMatchQueryBuilder.field("name",10);
             boolQueryBuilder.must(multiMatchQueryBuilder);
         }
-        if (StringUtils.isEmpty(courseSearchParam.getMt())){
+        if (StringUtils.isNotEmpty(courseSearchParam.getMt())){
             //根据一级分类搜索
             boolQueryBuilder.filter(QueryBuilders.termQuery("mt",courseSearchParam.getMt()));
         }
-        if (StringUtils.isEmpty(courseSearchParam.getSt())){
+        if (StringUtils.isNotEmpty(courseSearchParam.getSt())){
             //根据二级分类搜索
             boolQueryBuilder.filter(QueryBuilders.termQuery("st",courseSearchParam.getSt()));
         }
-        if (StringUtils.isEmpty(courseSearchParam.getGrade())){
+        if (StringUtils.isNotEmpty(courseSearchParam.getGrade())){
             //根据难度等级
             boolQueryBuilder.filter(QueryBuilders.termQuery("grade",courseSearchParam.getGrade()));
         }
