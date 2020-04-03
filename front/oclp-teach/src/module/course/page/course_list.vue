@@ -15,6 +15,7 @@
           </div>
         </el-card>
       </el-col>
+
       <el-col :span="8" v-for="(course, index) in courses" :key="course.id" :offset="index > 0 ? 2 : 2">
         <el-card :body-style="{ padding: '10px' }">
           <img :src="course.pic!=null?imgUrl+course.pic:'/static/images/nonepic.jpg'" class="image" height="150px">

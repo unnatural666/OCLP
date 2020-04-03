@@ -197,6 +197,8 @@
         //查询课程计划
         courseApi.findTeachplanList(this.courseid).then(res=>{
             if(res && res.children){
+              console.log(res)
+              console.log(res.children)
               this.teachplanList = res.children;
             }
 

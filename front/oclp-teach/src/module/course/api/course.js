@@ -41,9 +41,13 @@ export const findCoursePicList = courseId => {
 export const deleteCoursePic= courseId => {
   return http.requestDelete(apiUrl+'/course/coursepic/delete?courseId='+courseId)
 }
+// /*预览课程*/
+// export const preview = id => {
+//   return http.requestPost(apiUrl+'/course/preview/'+id);
+// }
 /*预览课程*/
 export const preview = id => {
-  return http.requestPost(apiUrl+'/course/preview/'+id);
+  return http.requestQuickGet(apiUrl+'/course/courseview/'+id);
 }
 /*发布课程*/
 export const publish = id => {
