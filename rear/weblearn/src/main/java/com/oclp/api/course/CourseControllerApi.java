@@ -2,10 +2,7 @@ package com.oclp.api.course;
 
 import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.ResponseResult;
-import com.oclp.domain.course.CourseBase;
-import com.oclp.domain.course.CourseMarket;
-import com.oclp.domain.course.CoursePic;
-import com.oclp.domain.course.Teachplan;
+import com.oclp.domain.course.*;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.CourseView;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -56,5 +53,7 @@ public interface CourseControllerApi {
     @ApiOperation("课程发布")
     public CoursePublishResult publish(String id);
 
+    @ApiOperation("保存课程计划和视频相关联")
+    public ResponseResult savemedia(TeachplanMedia teachplanMedia);
 
 }

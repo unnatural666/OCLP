@@ -4,10 +4,7 @@ import com.oclp.api.course.CourseControllerApi;
 import com.oclp.common.model.response.CommonCode;
 import com.oclp.common.model.response.QueryResponseResult;
 import com.oclp.common.model.response.ResponseResult;
-import com.oclp.domain.course.CourseBase;
-import com.oclp.domain.course.CourseMarket;
-import com.oclp.domain.course.CoursePic;
-import com.oclp.domain.course.Teachplan;
+import com.oclp.domain.course.*;
 import com.oclp.domain.course.ext.CourseInfo;
 import com.oclp.domain.course.ext.CourseView;
 import com.oclp.domain.course.ext.TeachplanNode;
@@ -106,5 +103,11 @@ public class CourseController implements CourseControllerApi {
     @PostMapping("/publish/{id}")
     public CoursePublishResult publish(@PathVariable("id") String id) {
         return courseService.publish(id);
+    }
+
+    @Override
+    @PostMapping("/savemedia")
+    public ResponseResult savemedia(@RequestBody TeachplanMedia teachplanMedia) {
+        return courseService.savemedia(teachplanMedia);
     }
 }

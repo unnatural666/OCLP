@@ -30,6 +30,13 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: weblearn
+  #rabbitmq配置
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
   #SpringMVC上传文件配置
   servlet:
     multipart:
@@ -59,7 +66,11 @@ weblearn:
       source_field: id,name,grade,mt,st,charge,valid,pic,qq,price,price_old,status,studymodel,teachmode,expires,pub_time,start_time,end_time
 
 weblearn-media:
+  mq:
+    queue-media-video-processor: queue_media_video_processor
+    routingkey-media-video: routingkey_media_video
   upload-location: F:/develop/video/
+  ffmpeg-path: F:/ffmpeg/bin/ffmpeg.exe
 
 pagehelper:
   helper-dialect: mysql
