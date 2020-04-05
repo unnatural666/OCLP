@@ -7,6 +7,7 @@ import com.oclp.domain.media.request.QueryMediaFileRequest;
 import com.oclp.service.MediaFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class MediaFileController implements MediaFileControllerApi {
 
     @Override
     @GetMapping("/list/{page}/{size}")
-    public QueryResponseResult<MediaFile> findList(int page, int size, QueryMediaFileRequest queryMediaFileRequest) {
+    public QueryResponseResult<MediaFile> findList(@PathVariable("page") int page,@PathVariable("size") int size, QueryMediaFileRequest queryMediaFileRequest) {
         return mediaFileService.findList(page,size,queryMediaFileRequest);
     }
 }
