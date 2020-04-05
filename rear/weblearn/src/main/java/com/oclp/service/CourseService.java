@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,8 @@ public class CourseService {
     CoursePubRepository coursePubRepository;
     @Autowired
     TeachplanMediaRepository teachplanMediaRepository;
+    @Autowired
+    TeachplanMediaPubRepository teachplanMediaPubRepository;
     //查询课程计划
     public TeachplanNode findTeachplanList(String courseId){
         return teachplanMapper.selectList(courseId);
@@ -297,8 +300,27 @@ public class CourseService {
         CoursePub coursePub=createCoursePub(id);
         saveCoursePub(id,coursePub);
         //课程缓存...
-
+        //向teachplanMediaPub中保存课程视频信息
+        saveTeachplanMediaPub(id);
         return new CoursePublishResult(CommonCode.SUCCESS);
+    }
+
+    //向teachplanMediaPub中保存课程视频信息
+    private void saveTeachplanMediaPub(String courseId){
+        //先删除teachplanMediaPub中的数据
+        teachplanMediaPubRepository.deleteByCourseId(courseId);
+        //从TeachplanMedia中查询课程视频信息
+        List<TeachplanMedia> teachplanMediaList = teachplanMediaRepository.findByCourseId(courseId);
+        //将teachplanMediaList插入到teachplanMediaPub中
+        List<TeachplanMediaPub> teachplanMediaPubList = new ArrayList<>();
+        for(TeachplanMedia teachplanMedia:teachplanMediaList){
+            TeachplanMediaPub teachplanMediaPub =new TeachplanMediaPub();
+            BeanUtils.copyProperties(teachplanMedia,teachplanMediaPub);
+            //添加时间戳
+            teachplanMediaPub.setTimestamp(new Date());
+            teachplanMediaPubList.add(teachplanMediaPub);
+        }
+        teachplanMediaPubRepository.saveAll(teachplanMediaPubList);
     }
 
     //更新课程发布状态
