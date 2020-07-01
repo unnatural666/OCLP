@@ -5,10 +5,9 @@ let apiUrl = sysConfig.xcApiUrlPre;
 
 //查询课程列表
 //我的课程列表
-export const findCourseList = (page,size,params) => {
-//使用工具类将json对象转成key/value
-  let queries = querystring.stringify(params)
-  return http.requestQuickGet(apiUrl+"/course/coursebase/list/"+page+"/"+size+"?"+queries)
+export const findCourseList = (page,size,userId) => {
+
+  return http.requestQuickGet(apiUrl+"/course/mycourse/list/"+page+"/"+size+"?"+"&userId="+userId)
 }
 
 //查询课程分类
@@ -53,6 +52,17 @@ export const publish = id => {
 export const findCourseView = courseId => {
   return http.requestQuickGet(apiUrl+'/course/courseview/'+courseId)
 }
+//my学习状态
+export const myStatus = params => {
+  return http.requestPost(apiUrl+'/course/choosecourseview/',params)
+}
+
+//my选课
+export const myChoose = params => {
+  return http.requestPost('/openapi/ucenter/choosecourse',params)
+}
+
+
 //信息回显getCoursebaseById
 export const getCoursebaseById = courseId => {
   return http.requestQuickGet(apiUrl+'/course/coursebase/get/'+courseId)
@@ -90,3 +100,10 @@ export const search_course = (page,size,params) => {
 export const sysres_category = () => {
   return http.requestQuickGet(apiUrl+"/category/category.json");
 }
+
+/*观看视频*/
+export const course_view = id => {
+  return http.requestQuickGet(apiUrl+'/search/course/getall/'+id);
+}
+
+

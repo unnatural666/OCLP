@@ -8,6 +8,8 @@ import router from './router'
 import lodash from 'lodash'
 
 import ElementUI from 'element-ui'
+//分割线没反应
+import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/theme/index.css'
 
 

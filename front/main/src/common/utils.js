@@ -43,9 +43,10 @@ export default {
     let activeUser={}
     //console.log(jwtDecodeVal)
     activeUser.utype = jwtDecodeVal.utype || '';
-    activeUser.username = jwtDecodeVal.name || '';
+    activeUser.name = jwtDecodeVal.name || '';
+    activeUser.username = jwtDecodeVal.username || '';
     activeUser.userpic = jwtDecodeVal.userpic || '';
-    activeUser.userid = jwtDecodeVal.userid || '';
+    activeUser.userid = jwtDecodeVal.id || '';
     activeUser.authorities = jwtDecodeVal.authorities || '';
     activeUser.uid = jwtDecodeVal.jti || '';
     activeUser.jwt = jwt;
@@ -65,9 +66,11 @@ export default {
         let activeUser={}
         //console.log(jwtDecodeVal)
         activeUser.utype = jwtDecodeVal.utype || '';
-        activeUser.username = jwtDecodeVal.user_name || '';
+        activeUser.username = jwtDecodeVal.username || '';
+        activeUser.name = jwtDecodeVal.name || '';
+        // activeUser.username = jwtDecodeVal.user_name || '';
         activeUser.userpic = jwtDecodeVal.userpic || '';
-        activeUser.userid = jwtDecodeVal.userid || '';
+        activeUser.userid = jwtDecodeVal.id || '';
         activeUser.authorities = jwtDecodeVal.authorities || '';
         activeUser.menus = jwtDecodeVal.menus || '';
 

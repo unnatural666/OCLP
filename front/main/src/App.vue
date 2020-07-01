@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view  />
     <go-top></go-top>
 
     <div class="foot">

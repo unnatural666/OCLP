@@ -2,7 +2,7 @@
   <div >
 <!--    搜索部分-->
     <div >
-      <h2>关键字：</h2>
+      <h2>关键字：{{this.keyword}}</h2>
       <p>
         一级分类：
         <template v-for="(item,index) in se.subject">
@@ -25,7 +25,7 @@
       </p>
     </div>
 <!--    页面部分-->
-    <div>
+    <div >
       <section>
       <el-row >
 <!--        <el-col :span="8"  :offset=2 >-->
@@ -43,14 +43,14 @@
 <!--          </el-card>-->
 <!--        </el-col>-->
 
-        <el-col :span="8" v-for="(course, index) in courses" :key="course.id" :offset="index > 0 ? 2 : 2">
-          <el-card :body-style="{ padding: '10px' }">
-            <img :src="course.pic!=null?imgUrl+course.pic:'/static/images/nonepic.jpg'" class="image" height="150px">
+        <el-col :span="8" v-for="(course, index) in courses" :key="course.id" :offset="index > 0 ? 1 : 1">
+          <el-card :body-style="{ padding: '15px' }">
+            <router-link :to="{path:'/coursedetail/'+course.id}" @click="handleManage(course.id)" target="_blank"><img :src="course.pic!=null?imgUrl+course.pic:'/static/images/nonepic.jpg'" class="image" height="150px"> </router-link>
             <div style="padding: 10px;">
               <span>{{course.name}}</span>
               <div class="bottom clearfix">
                 <time class="time"></time>
-                <el-button type="text" class="button" @click="handleManage(course.id)">管理课程</el-button>
+<!--                <el-button type="text" class="button" @click="handleManage(course.id)">管理课程</el-button>-->
               </div>
             </div>
           </el-card>
@@ -64,7 +64,8 @@
           </el-pagination>
         </el-col>
       </el-row>
-    </section></div>
+    </section>
+    </div>
 
 
   </div>
@@ -88,6 +89,8 @@
         size:7,
         total:0,
         keyword:'',
+        courseid:'',
+
         courses: [
           {
             id:'402885816243d2dd016243f24c030002',
@@ -845,7 +848,7 @@
             },
 
           ],
-          currentTag:"front",
+          currentTag:"program",
           currentName:"",
           currentStatus:""
         },
@@ -866,7 +869,7 @@
           currentTag:"all",
           currentName:"",
           currentStatus:"",
-          tag:'',
+          tag:'program',
           pid:'',
           cid:'',
           mt:'',
@@ -879,6 +882,10 @@
       }
     },
     methods:{
+      //看视频
+      handleManage(courseid){
+        console.log(courseid)
+      },
       //分页方法
       handleCurrentChange(val) {
         this.page = val;
@@ -923,9 +930,13 @@
       PubSub.subscribe('searchkey',(event,keyword)=>{
         console.log(keyword)
         this.se1.keyword=keyword
+        this.keyword=keyword
         this.search()
 
       })
+    },
+    created(){
+      this.subjectClick()
     }
 
   }

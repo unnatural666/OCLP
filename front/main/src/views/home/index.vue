@@ -564,7 +564,7 @@
             <div class="responsive">
               <div class="img">
                 <a target="_blank" href="http://static.runoob.com/images/demo/demo1.jpg">
-                  <img src="@/assets/img/vimage/sc.jpg" alt="图片文本描述" width="230" height="160" />
+                  <img src="../../assets/img/vimage/sc.jpg" alt="图片文本描述" width="230" height="160" />
                 </a>
               </div>
               <div class="desc">这里添加图片文本描述</div>
@@ -771,4 +771,4 @@ li:hover {
   transform: scale(1.3);
 }
 </style>
-</style>
+

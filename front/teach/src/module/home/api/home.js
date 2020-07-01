@@ -6,13 +6,15 @@ export const login = params => {
   //let loginRequest = querystring.stringify(params)
   let loginRequest = qs.stringify(params);
 
-  return http.requestPostForm('/auth/login',loginRequest);
+  return http.requestPostForm('/openapi/auth/userlogin',loginRequest);
 }
 /*退出*/
 export const logout = params => {
-  sessionStorage.removeItem('activeUser');
-  return http.requestPost('/auth/userlogout');
+  return http.requestPost('/openapi/auth/userlogout');
 }
 
-
+/*获取jwt令牌*/
+export const getjwt = () => {
+  return http.requestGet('/openapi/auth/userjwt');
+}
 

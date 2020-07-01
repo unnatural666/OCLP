@@ -64,6 +64,7 @@
 </template>
 
 <script>
+
   import PHead from '@/base/components/head.vue';
   import utilApi from '../../../common/utils';
   export default {

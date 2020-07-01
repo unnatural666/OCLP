@@ -1,23 +1,23 @@
 <template>
-<div><br/>
-  操作步骤：<br/>
-  1、点击“选择文件”，选择要上传的文件<br/>
-  2、点击“开始上传”，开始上传文件<br/>
-  3、如需重新上传请重复上边的步骤。<br/><br/>
+  <div><br/>
+    操作步骤：<br/>
+    1、点击“选择文件”，选择要上传的文件<br/>
+    2、点击“开始上传”，开始上传文件<br/>
+    3、如需重新上传请重复上边的步骤。<br/><br/>
 
-  <div id="uploader" class="wu-example">
-    <div class="btns" style="float:left;padding-right: 20px">
-      <div id="picker">选择文件</div>
+    <div id="uploader" class="wu-example">
+      <div class="btns" style="float:left;padding-right: 20px">
+        <div id="picker">选择文件</div>
+      </div>
+      <div id="ctlBtn" class="webuploader-pick" @click="upload()">开始上传</div>
+
     </div>
-    <div id="ctlBtn" class="webuploader-pick" @click="upload()">开始上传</div>
+    <!--用来存放文件信息-->
+    <div id="thelist" class="uploader-list" >
+      <div v-if="uploadFile.id" :id='uploadFile.id'><span>{{uploadFile.name}}</span>&nbsp;<span class='percentage'>{{percentage}}%</span></div>
 
+    </div>
   </div>
-  <!--用来存放文件信息-->
-  <div id="thelist" class="uploader-list" >
-    <div v-if="uploadFile.id" :id='uploadFile.id'><span>{{uploadFile.name}}</span>&nbsp;<span class='percentage'>{{percentage}}%</span></div>
-
-  </div>
-</div>
 </template>
 <script>
   import $ from '../../../../static/plugins/jquery/dist/jquery.js'
@@ -106,7 +106,7 @@
                 },
                 dataType:"json",
                 success:function(response) {
-                  if(response.ifExist) {
+                  if(response.fileExist) {
                     // 分块存在，跳过该分块
                     deferred.reject();
                   } else {
@@ -137,9 +137,9 @@
                 success:function(response){
                   //在这里解析合并成功结果
                   if(response && response.success){
-                      alert("上传成功")
+                    alert("上传成功")
                   }else{
-                      alert("上传失败")
+                    alert("上传失败")
                   }
                 }
               }
@@ -181,7 +181,7 @@
       // 监控上传进度
       // percentage:代表上传文件的百分比
       this.uploader.on("uploadProgress", function(file, percentage) {
-          this.percentage = Math.ceil(percentage * 100);
+        this.percentage = Math.ceil(percentage * 100);
       }.bind(this));
       //上传失败触发
       this.uploader.on("uploadError", function(file,reason) {
@@ -195,9 +195,9 @@
       });
       //每个分块上传请求后触发
       this.uploader.on( 'uploadAccept', function( file, response ) {
-          if(!(response && response.success)){//分块上传失败，返回false
-              return false;
-          }
+        if(!(response && response.success)){//分块上传失败，返回false
+          return false;
+        }
       });
 
     }

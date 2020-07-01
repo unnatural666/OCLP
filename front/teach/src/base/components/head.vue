@@ -1,4 +1,5 @@
 <template>
+
   <div>
 
     <el-col :span="24" class="header">
@@ -10,7 +11,7 @@
           <i class="fa fa-align-justify"></i>
         </div>
       </el-col>-->
-      <el-col :span="10" class="userinfo" v-if="this.logined">
+      <el-col :span="10" class="userinfo" >
         <!--<el-dropdown trigger="hover">
          <span class="el-dropdown-link userinfo-inner"><img :src="this.user.sysUserImg!=null?this.user.sysUserImg:'/static/images/small.jpg'"/> {{user.username}}</span>
 
@@ -26,8 +27,9 @@
             <div class="usermenu" >
               <span class="el-dropdown-link userinfo-inner"><img :src="this.user.sysUserImg!=null?this.user.sysUserImg:'/static/images/small.jpg'"/></span>
               欢迎您：{{user.username}}
-              <a href="http://www.xuecheng.com" target="_blank"><i class="el-icon-star-on"></i>首页</a>
-              <a href="javascript:;" @click="logout" :loading="editLoading"><i class="el-icon-circle-close"></i>退出</a>
+              <a href="http://localhost:15000/#/" target="_blank"><i class="el-icon-star-on"></i>首页</a>
+              <a href="javascript:;" @click="exit" :loading="editLoading" v-if="logined"><i class="el-icon-circle-close"></i>退出</a>
+              <router-link to="/login" v-if="!logined">登录</router-link>|
             </div>
           </div>
       </el-col>
@@ -45,6 +47,7 @@
   </div>
 </template>
 <script type="text/javascript">
+  import PubSub from 'pubsub-js'
   import jwtDecode from 'jwt-decode'
   import utilApi from '../../common/utils'
   import * as loginApi from '../../module/home/api/home'
@@ -58,7 +61,7 @@
           username: '',
           userimg: ''
         },
-        logined:false,
+        logined:true,
         collapsed: false,
 
 
@@ -66,47 +69,91 @@
     },
     methods: {
 
-      //退出登录
-      logout: function () {
-        this.$confirm('确认退出吗?', '提示', {
-        }).then(() => {
-          //跳转到统一登陆
-          window.location = "http://ucenter.xuecheng.com/#/logout"
-          /*const loading = this.$loading({
-            lock: true,
-            text: 'Loading',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-          });
-          loginApi.logout({}).then((res) => {
-              loading.close();
-            if(res.success){
-              this.$message('退出成功');
-              //跳转到登陆页面
-              this.$router.push({ path: '/login'})
-            }else{
-              this.$message.error('退出失败');
-            }
-          },
-            (res) => {
-              loading.close();
-            });*/
-        }).catch(() => {
 
+      //退出登录
+      exit: function () {
+        this.$confirm('退出后将不能继续学习，确认退出吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          loginApi.logout({}).then((res) => {
+              if(res.success){
+                sessionStorage.removeItem('activeUser');
+                this.$message({message: '欢迎您下次再来！ ',showClose: true});
+                this.user.username=''
+                this.logined = false
+
+                this.$router.push('/')
+              }else{
+                this.logined = true
+              }
+            },
+            (res) => {
+              // this.logoutsuccess = false
+            });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退出！',
+            showClose:true
+          });
         });
       },
-      refresh_user:function(){
+      refresh_user(){
+        //从sessionStorage中取出当前用户
         let activeUser= utilApi.getActiveUser();
 
-        if(activeUser){
+        //取出cookie中的令牌
+        let uid = utilApi.getCookie("uid")
+
+        if(activeUser && uid && uid == activeUser.uid){
           this.logined = true
           this.user = activeUser;
-          //console.log(this.user.username)
+          console.log(this.user.username)
+        }else{
+          if(!uid){
+            return ;
+          }
+          //请求查询jwt
+          loginApi.getjwt().then((res) => {
+            if(res.success){
+              let jwt = res.jwt;
+              let activeUser = utilApi.getUserInfoFromJwt(jwt)
+              if(activeUser){
+                this.logined = true
+                this.user = activeUser;
+                utilApi.setUserSession("activeUser",JSON.stringify(activeUser))
+              }
+            }
+          })
+        }
+      },
+      quzhi(){
+        let myName=JSON.parse(sessionStorage.getItem("activeUser"));
+        console.log('=-----============================================')
+
+        this.user.userid=myName.userid
+        this.user.username=myName.username
+        console.log(this.user.username)
+        if(this.user.username==''){
+          this.logined=false
+        }
+        else {
+          this.logined=true
         }
       }
     },
+    created(){
+      PubSub.subscribe('username',(event,username)=>{
+        console.log(username)
+        this.user.username=username
+
+      })
+  },
     mounted() {
       this.refresh_user()
+      this.quzhi()
 
     }
   }

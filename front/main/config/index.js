@@ -3,8 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 const path = require('path')
 var proxyConfig = require('./proxyConfig')
-let sysConfig = require('./sysConfig')
-let xcApiUrl = sysConfig.xcApiUrl
+
 module.exports = {
   dev: {
 
@@ -13,34 +12,24 @@ module.exports = {
     assetsPublicPath: '/',
     //proxyTable: proxyConfig.proxyList,
     proxyTable: {
-      '/banner': {
-        // target: 'http://localhost:3000/mock/11'
-        target: 'http://127.0.0.1:7777'
-      },
-     /* '/api': {
-        // target: 'http://localhost:3000/mock/11'
-        target: xcApiUrl
-        //target: 'http://127.0.0.1:50201'
-
-      }*/
-       '/api/ucenter': {
-       // target: 'http://localhost:3000/mock/11'
-       target: 'http://127.0.0.1:31200',
-         pathRewrite: {
-           '^/api': ''
-         }
-       // target: 'http://127.0.0.1:50201'
-
-       },
-       '/api/auth': {
-       // target: 'http://localhost:3000/mock/11'
-       target: 'http://127.0.0.1:31200/auth',
-         pathRewrite: {
-           '^/api': ''
-         }
-       // target: 'http://127.0.0.1:50201/api'
-
-       },
+       // '/api/ucenter': {
+       // // target: 'http://localhost:3000/mock/11'
+       // target: 'http://127.0.0.1:31200',
+       //   pathRewrite: {
+       //     '^/api': ''
+       //   }
+       // // target: 'http://127.0.0.1:50201'
+       //
+       // },
+       // '/api/auth': {
+       // // target: 'http://localhost:3000/mock/11'
+       // target: 'http://127.0.0.1:31200/auth',
+       //   pathRewrite: {
+       //     '^/api': ''
+       //   }
+       // // target: 'http://127.0.0.1:50201/api'
+       //
+       // },
        '/api/course': {
        // target: 'http://localhost:3000/mock/11'
        //   target: 'http://127.0.0.1:31200',
@@ -55,35 +44,34 @@ module.exports = {
       '/api/search': {
         // target: 'http://localhost:3000/mock/11'
         //   target: 'http://127.0.0.1:31200',
-        target: 'http://localhost:31200',
+        target: 'http://localhost:40100',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
         }
         // target: 'http://127.0.0.1:50201/api'
-
       },
        '/api/media': {//媒资管理
        // target: 'http://127.0.0.1:31400',
-       target: 'http://127.0.0.1:31200',
+       target: 'http://127.0.0.1:31400',
          pathRewrite: {
            '^/api': ''
          }
        // target: 'http://127.0.0.1:50201'
        },
-
-       '/api/cms': {//cms管理
-       //target: 'http://127.0.0.1:31001'
-       target: 'http://127.0.0.1:50201',
-         pathRewrite: {
-           '^/api': ''
-         }
-
-       },
+       //
+       // '/api/cms': {//cms管理
+       // //target: 'http://127.0.0.1:31001'
+       // target: 'http://127.0.0.1:31200',
+       //   pathRewrite: {
+       //     '^/api': ''
+       //   }
+       //
+       // },
 
        '/api/filesystem': {//文件系统管理
        // target: 'http://192.168.1.105:22122',
-         target: 'http://localhost:31200',
+         target: 'http://localhost:22100',
          changeOrigin: true,
          pathRewrite: {
            '^/api': ''
@@ -101,15 +89,39 @@ module.exports = {
 
        },
        '/api/sys': {//系统管理
-       // target: 'http://127.0.0.1:31001',
-       target: 'http://localhost:31200',
+        // target: 'http://127.0.0.1:31001',
+        target: 'http://localhost:31200',
 
-         pathRewrite: {
-           '^/api': ''
-         }
-       // target: 'http://127.0.0.1:50201'
+        pathRewrite: {
+          '^/api': ''
+        },
 
-       }
+
+        // target: 'http://127.0.0.1:50201'
+
+      },
+      '/openapi/auth': {
+        // target: 'http://localhost:3000/mock/11'
+        target: 'http://127.0.0.1:40400',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/openapi': ''
+        }
+        // target: 'http://127.0.0.1:50201/api'
+
+      },
+      '/openapi/ucenter': {
+        // target: 'http://localhost:3000/mock/11'
+        target: 'http://127.0.0.1:40300',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/openapi': ''
+        }
+        // target: 'http://127.0.0.1:50201/api'
+
+      },
+
+
       /*'/static/!*': {//系统管理
        //target: 'http://127.0.0.1:31001'
        target: 'http://127.0.0.1'

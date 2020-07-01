@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+  import PubSub from 'pubsub-js'
 import PHead from '@/base/components/head.vue';
 import utilApi from '../../../common/utils';
 import * as loginApi from '../api/home';
@@ -33,6 +34,7 @@ export default {
   data() {
     return {
       editLoading: false,
+      username:'',
       loginForm: {
         username:'',
         password: ''
@@ -60,6 +62,9 @@ export default {
               loginApi.login(para).then((res) => {
                 this.editLoading = false;
                 if(res.success){
+                  console.log(res)
+                  this.username=res.username
+                  PubSub.publish('username',this.username)
                   this.$message('登陆成功');
                   //跳转到首页
                   this.$router.push({ path: '/'})

@@ -2,9 +2,30 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/components/Layout'
 import AllCourse from '@/views/allcourse'
-import StudyTrack from '@/views/studytrack'
+import Java from '@/views/studytrack/java'
+import BigData from '@/views/studytrack/bigdata'
+import Web from '@/views/studytrack/web'
+import Python from '@/views/studytrack/python'
+import Android from '@/views/studytrack/android'
+
 import FaceTeach from '@/views/faceteach'
 import CourseDetail from  '@/views/coursedetail'
+
+
+import SafeSet from  '@/views/ucenter/safeset'
+import StuSafeSet from  '@/views/ucenter/stusafeset'
+import UserCenter from  '@/views/ucenter/usercenter'
+import OverView from  '@/views/ucenter/overview'
+import Bought from  '@/views/ucenter/bought'
+import Dealing from  '@/views/ucenter/dealing'
+import Income from  '@/views/ucenter/income'
+import Rule from  '@/views/ucenter/rule'
+import Help from  '@/views/ucenter/help'
+import About from  '@/views/ucenter/about'
+import Basic from  '@/views/ucenter/basic'
+import CurrentStudy from  '@/views/ucenter/currentstudy'
+import Teacher from  '@/views/ucenter/teacher'
+
 
 
 // import Add from '@/views/managecourse/page/course_add'
@@ -51,27 +72,103 @@ const router = new Router({
           //   requireLogin: true
           // }
 	    	},
+
         {
-          path: '/studytrack',
-          component: StudyTrack
-          // meta: {
-          //   requireLogin: true
-          // },
+          path:'/java',
+          component:Java
+        },
+        {
+          path:'/bigdata',
+          component:BigData
+        },
+        {
+          path:'/android',
+          component:Android
+        },
+        {
+          path:'/python',
+          component:Python
+        },
+        {
+          path:'/web',
+          component:Web
         },
         {
           path: '/faceteach',
           component: FaceTeach
+
           // meta: {
           //   requireLogin: true
           // },
         },
           {
-              path: '/coursedetail',
+              path: '/coursedetail/:courseid',
               component: CourseDetail
               // meta: {
               //   requireLogin: true
               // },
           },
+        {
+          path: '/usercenter',
+          component: UserCenter,
+          children:[
+            {
+              path:'/',
+              component:SafeSet,
+            },
+            {
+              path:'/safeset',
+              component:SafeSet,
+            },
+            {
+              path:'/stusafeset',
+              component:StuSafeSet,
+            },
+            {
+              path:'/currentstudy',
+              component:CurrentStudy,
+            },
+            {
+              path:'/about',
+              component:About,
+            },
+            {
+              path:'/basic',
+              component:Basic,
+            },
+            {
+              path:'/teacher',
+              component:Teacher,
+            },
+            {
+              path:'/bought',
+              component:Bought,
+            },
+            {
+              path:'/dealing',
+              component:Dealing,
+            },
+            {
+              path:'/overview',
+              component:OverView,
+            },
+            {
+              path:'/income',
+              component:Income,
+            },
+            {
+              path:'/rule',
+              component:Rule,
+            },
+            {
+              path:'/help',
+              component:Help,
+            },
+          ]
+
+        },
+
+
 
 
           // {

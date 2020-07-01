@@ -31,5 +31,6 @@ export default [
           { path: '/course/manage/summary/:courseid', name: '课程首页',component: course_summary,hidden: false }
         ]}
     ]
-  }
+  },
+
 ]

@@ -13,6 +13,7 @@
           </router-link>
         </el-col>
         <el-col v-if="!simple" :span="16">
+
           <el-menu
             :router="true"
             menu-trigger="click"
@@ -23,32 +24,35 @@
             <el-menu-item index="/">首页</el-menu-item>
             <el-menu-item index="/allcourse">课程</el-menu-item>
             <!-- 下拉菜单 -->
-<!--            <el-menu-item index="/studytrack" disabled>-->
-<!--              <el-col :span="12">-->
-<!--                <el-dropdown>-->
-<!--                  <span class="el-dropdown-link">-->
-<!--                    学习路线图-->
-<!--                    <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-<!--                  </span>-->
-<!--                  <el-dropdown-menu slot="dropdown">-->
-<!--                    <el-dropdown-item icon="el-icon-star-off">Java开发</el-dropdown-item>-->
-<!--                    <el-dropdown-item icon="el-icon-star-on">大数据</el-dropdown-item>-->
-<!--                    <el-dropdown-item icon="el-icon-circle-plus-outline">Python</el-dropdown-item>-->
-<!--                    <el-dropdown-item icon="el-icon-check">前端开发</el-dropdown-item>-->
-<!--                    <el-dropdown-item icon="el-icon-circle-check">Android开发</el-dropdown-item>-->
-<!--                  </el-dropdown-menu>-->
-<!--                </el-dropdown>-->
-<!--              </el-col>-->
-<!--            </el-menu-item>-->
+
             <!-- <el-menu-item index="/faceteach">面授高薪班</el-menu-item> -->
 
             <el-menu-item >	<div class="input1"> <el-input placeholder="搜索课程" prefix-icon="el-icon-search" @keyup.enter.native="search" v-model="keyword" ></el-input></div></el-menu-item>
 
-            <el-menu-item index="/allcourse">我的学习</el-menu-item>
-            <el-menu-item index="/allcourse">教学提供方</el-menu-item>
+<!--            <el-menu-item @click="my"  index="/usercenter">我的学习</el-menu-item>-->
+            <el-menu-item   @click="my" v-show="this.myself">我的学习</el-menu-item>
+            <el-menu-item    v-show="!this.myself" index="/usercenter">我的学习</el-menu-item>
+
 <!--            <el-menu-item index="/course" @click="tiao">系统后台</el-menu-item>-->
-            <el-menu-item  @click="tiao"  target="_blank" >系统后台</el-menu-item>
-            <el-menu-item  index="/coursedetail" >课程详情</el-menu-item>
+            <el-menu-item  @click="tiao"  target="_blank" v-if="!this.myrole==false">系统后台</el-menu-item>
+<!--            <el-menu-item  index="/coursedetail/courseid" >课程详情</el-menu-item>-->
+            <el-menu-item  >
+              <el-col :span="12">
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    学习路线图
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown" disabled>
+                    <el-menu-item  index="/bigdata" style="height: 35px"><el-dropdown-item icon="el-icon-star-on" >大数据</el-dropdown-item></el-menu-item>
+                    <el-menu-item  index="/java" style="height: 35px"><el-dropdown-item icon="el-icon-star-off" >Java开发</el-dropdown-item></el-menu-item>
+                      <el-menu-item  index="/web" style="height: 35px"><el-dropdown-item icon="el-icon-check">前端开发</el-dropdown-item></el-menu-item>
+                    <el-menu-item  index="/python" style="height: 35px"><el-dropdown-item icon="el-icon-circle-plus-outline">Python学习</el-dropdown-item></el-menu-item>
+                    <el-menu-item  index="/android" style="height: 35px"><el-dropdown-item icon="el-icon-circle-check">Android开发</el-dropdown-item></el-menu-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+            </el-menu-item>
           </el-menu>
 
         </el-col>
@@ -62,7 +66,8 @@
             mode="horizontal"
             active-text-color="#5FB878"
           >
-            <template >
+
+            <template v-if="this.logined==false">
               <el-menu-item index="/login">
                 <el-button type="text">登录</el-button>
               </el-menu-item>
@@ -71,17 +76,22 @@
               </el-menu-item>
             </template>
 
-<!--            <template >-->
-<!--              <el-submenu index>-->
-<!--                <template slot="title">-->
-<!--                  &lt;!&ndash;<img class="me-header-picture" :src="user.avatar" />						    	&ndash;&gt;-->
-<!--                  <img class="me-header-picture" src="/src/static/user/head.jpeg" />-->
-<!--                </template>-->
-<!--                <el-menu-item >-->
-<!--                  <i class="el-icon-back"></i>退出-->
-<!--                </el-menu-item>-->
-<!--              </el-submenu>-->
-<!--            </template>-->
+            <template v-else>
+              <span v-if="logined" style="position:absolute;margin: 20px -100px">欢迎您:{{this.user.name}}</span>
+              <el-submenu index>
+                <template slot="title">
+                  <!--<img class="me-header-picture" :src="user.avatar" />						    	-->
+                  <img class="me-header-picture" src="../../../static/images/head.jpeg" />
+                </template>
+                <el-menu-item >
+                  <span @click="exit"><i class="el-icon-back" ></i>退出</span>
+                </el-menu-item>
+              </el-submenu>
+
+            </template>
+
+
+
           </el-menu>
         </el-col>
       </el-row>
@@ -91,6 +101,10 @@
 
 <script>
   import PubSub from 'pubsub-js'
+  import utilApi from '../../common/utils';
+  import * as loginApi from '../../base/api/login';
+
+
 export default {
   name: "AppHeader",
   props: {
@@ -102,9 +116,18 @@ export default {
   },
   data() {
     return {
-
-		input1:'',
-		keyword:'',
+      myself:true,
+      myrole:false,
+      user:{
+        name:'',
+        utype:'',
+        userid:'',
+        username: '',
+        userpic: ''
+      },
+      logined:false,
+		 input1:'',
+		 keyword:'',
 
 	};
   },
@@ -125,11 +148,92 @@ export default {
       }
 
     },
+    my(){
+      if(!this.user.name){
+        this.$message({message: '请先登录哦！ ',type: 'warning',showClose: true});
+
+      }else{
+        this.myself=false
+        this.$router.push('/usercenter')
+        // window.open(' http://localhost:13000')
+      }
+
+    },
     tiao(){
       // window.location.href = " http://localhost:12000"
       window.open(' http://localhost:12000')
 
     },
+    refresh_user(){
+      //从sessionStorage中取出当前用户
+      let activeUser= utilApi.getActiveUser();
+
+      //取出cookie中的令牌
+      let uid = utilApi.getCookie("uid")
+
+      if(activeUser && uid && uid == activeUser.uid){
+        this.logined = true
+        this.user = activeUser;
+        console.log(this.user.username)
+      }else{
+        if(!uid){
+          return ;
+        }
+        //请求查询jwt
+        loginApi.getjwt().then((res) => {
+          if(res.success){
+            let jwt = res.jwt;
+            let activeUser = utilApi.getUserInfoFromJwt(jwt)
+            if(activeUser){
+              this.logined = true
+              this.user = activeUser;
+              utilApi.setUserSession("activeUser",JSON.stringify(activeUser))
+            }
+          }
+        })
+      }
+    },
+      exit(){
+        this.$confirm('退出后将不能继续学习，确认退出吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          loginApi.logout({}).then((res) => {
+              if(res.success){
+                sessionStorage.removeItem('activeUser');
+                this.$message({message: '欢迎您下次再来！ ',showClose: true});
+                this.user.username=''
+                this.logined = false
+                this.myrole=false
+                this.myself=true
+                this.$router.push('/')
+              }else{
+                this.logined = true
+              }
+            },
+            (res) => {
+              // this.logoutsuccess = false
+            });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退出！',
+            showClose:true
+          });
+        });
+
+      },
+     roles(){
+      if(this.user.utype=='101002'||this.user.utype=='101003'){
+        this.myrole=true
+      }else {
+        this.myrole=false
+      }
+},
+
+
+
     // logout() {
     //   let that = this;
     //   this.$store
@@ -148,6 +252,27 @@ export default {
     //       }
     //     });
     // }
+  },
+  activated(){
+
+
+  },
+  created(){
+
+    PubSub.subscribe('utype',(event,utype)=>{
+      console.log(utype)
+      this.user.utype=utype
+   this.roles()
+    })
+
+  },
+
+  mounted(){
+
+    //刷新当前用户
+    // this.refresh_user()
+    this.refresh_user()
+    this.roles()
   }
 };
 </script>
